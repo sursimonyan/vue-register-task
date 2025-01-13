@@ -1,8 +1,8 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, maxLength, minLength } from '@vuelidate/validators'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 const router = useRouter();
 

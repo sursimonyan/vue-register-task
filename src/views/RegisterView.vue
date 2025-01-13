@@ -1,10 +1,10 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, maxLength, minLength } from '@vuelidate/validators'
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
-import { useRouter } from 'vue-router';
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+import { useRouter } from 'vue-router'
 
 const router = useRouter();
 
@@ -23,9 +23,9 @@ const rules = {
 	firstName: { required, minLength: minLength(2) },
 	lastName: { required, minLength: minLength(2) },
 	email: { required, email },
-	password: { required, minLength: minLength(8), maxLength: maxLength(30) },
+	password: { required, minLength: minLength(8), maxLength: maxLength(20) },
 	confirmPassword: {
-		minLength: minLength(8), maxLength: maxLength(30), required: function () {
+		minLength: minLength(8), maxLength: maxLength(20), required: function () {
 			return formData.confirmPassword === formData.password;
 		}
 	},
@@ -39,8 +39,12 @@ const submitForm = async () => {
 
 	if (result) {
 		localStorage.setItem('loginData', JSON.stringify({
+			firstName: formData.firstName,
+			lastName: formData.lastName,
 			email: formData.email,
+			date: formData.date,
 			password: formData.password,
+			username: `${formData.firstName} ${formData.lastName}`,
 		}));
 
 		formData.firstName = '';
@@ -89,7 +93,7 @@ const submitForm = async () => {
 				<input v-model="formData.password" class="w-full p-2 border border-green-400 rounded-md outline-0 input_focus"
 					type="password" :class="{ 'border-red-600': v$.password.$error && v$.password.$touch }"
 					@blur="v$.password.$touch">
-				<div v-if="v$.password.$error" class="text-red-600 font-bold">Password is required</div>
+				<div v-if="v$.password.$error" class="text-red-600 font-bold">Old Password is required and min 8 and max 20 characters</div>
 			</label>
 			<label class="mb-4">
 				<span class="mb-2 block text-xl font-bold">Confirm Password</span>
@@ -99,10 +103,10 @@ const submitForm = async () => {
 					@blur="v$.confirmPassword.$touch">
 				<div v-if="formData.password !== formData.confirmPassword" class="text-red-600 font-bold">Confirm password
 					must equal to password</div>
-				<div v-if="v$.confirmPassword.$error" class="text-red-600 font-bold">Confirm password is required</div>
+				<div v-if="v$.confirmPassword.$error" class="text-red-600 font-bold">Confirm password is required and min 8 and max 20 characters</div>
 			</label>
 			<label class="mb-4">
-				<VueDatePicker v-model="formData.date" @blur="$v.date.$touch()"></VueDatePicker>
+				<VueDatePicker v-model="formData.date"></VueDatePicker>
 			</label>
 			<button type="submit" class="h-10 text-xl bg-green-500 text-white rounded-md hover:bg-green-600">Register</button>
 		</form>
